@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  service-registry:
+    image: oklat85/service-registry:latest
+    container_name: service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - movie-app
+    environment:
+     - "SPRING_APPLICATION_NAME=service-registry"
+     - "SPRING_PROFILES_ACTIVE=docker"
+
+  movie-catalog-service:
+    image: oklat85/movie-catalog-service:latest
+    container_name:  movie-catalog-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - service-registry
+    networks:
+      - movie-app
+    environment:
+     - "SPRING_APPLICATION_NAME=movie-catalog-service"
+     - "SPRING_PROFILES_ACTIVE=docker"
+
+  movie-info-service:
+    image: oklat85/movie-info-service:latest
+    container_name:  movie-info-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - service-registry
+    networks:
+      - movie-app
+    environment:
+     - "SPRING_APPLICATION_NAME=movie-info-service"
+     - "SPRING_PROFILES_ACTIVE=docker"
+
+  rating-data-service:
+    image: oklat85/rating-data-service:latest
+    container_name:  rating-data-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - service-registry
+    networks:
+      - movie-app
+    environment:
+     - "SPRING_APPLICATION_NAME=rating-data-service"
+     - "SPRING_PROFILES_ACTIVE=native"
+     
+networks:
+  movie-app:
+    name: movie-app
+    driver: bridge
