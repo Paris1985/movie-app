@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 
 services:
   service-registry:
@@ -9,10 +9,10 @@ services:
     networks:
       - movie-app
     environment:
-     - "SPRING_APPLICATION_NAME=service-registry"
-     - "SPRING_PROFILES_ACTIVE=docker"
-     - "eureka.instance.hostname=service-registry"
-     - "eureka.client.serviceUrl.defaultZone=http://service-registry:8761/eureka/"
+      server.port: 8761
+      SPRING_APPLICATION_NAME: service-registry
+      SPRING_PROFILES_ACTIVE: docker
+      eureka.client.serviceUrl.defaultZone: http://service-registry:8761/eureka/
 
   movie-catalog-service:
     build: movie-catalog-service
@@ -24,9 +24,10 @@ services:
     networks:
       - movie-app
     environment:
-     - "SPRING_APPLICATION_NAME=movie-catalog-service"
-     - "SPRING_PROFILES_ACTIVE=docker"
-     - "eureka.client.serviceUrl.defaultZone=http://service-registry:8761/eureka/"
+      server.port: 8081
+      SPRING_APPLICATION_NAME: movie-catalog-service
+      SPRING_PROFILES_ACTIVE: docker
+      eureka.client.serviceUrl.defaultZone: http://service-registry:8761/eureka/
     links:
      - service-registry
 
@@ -40,9 +41,10 @@ services:
     networks:
       - movie-app
     environment:
-     - "SPRING_APPLICATION_NAME=movie-info-service"
-     - "SPRING_PROFILES_ACTIVE=docker"
-     - "eureka.client.serviceUrl.defaultZone=http://service-registry:8761/eureka/"
+      server.port: 8082
+      SPRING_APPLICATION_NAME: movie-info-service
+      SPRING_PROFILES_ACTIVE: docker
+      eureka.client.serviceUrl.defaultZone: http://service-registry:8761/eureka/
     links:
      - service-registry
 
@@ -56,9 +58,10 @@ services:
     networks:
       - movie-app
     environment:
-     - "SPRING_APPLICATION_NAME=rating-data-service"
-     - "SPRING_PROFILES_ACTIVE=docker"
-     - "eureka.client.serviceUrl.defaultZone=http://service-registry:8761/eureka/"
+      server.port: 8083
+      SPRING_APPLICATION_NAME: rating-data-service
+      SPRING_PROFILES_ACTIVE: docker
+      eureka.client.serviceUrl.defaultZone: http://service-registry:8761/eureka/
     links:
      - service-registry
      
