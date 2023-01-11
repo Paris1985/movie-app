@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   service-registry:
-    image: oklat85/service-registry:latest
+    build: service-registry
     container_name: service-registry
     ports:
       - "8761:8761"
@@ -11,9 +11,11 @@ services:
     environment:
      - "SPRING_APPLICATION_NAME=service-registry"
      - "SPRING_PROFILES_ACTIVE=docker"
+     - "eureka.instance.hostname=service-registry"
+     - "eureka.client.serviceUrl.defaultZone=http://service-registry:8761/eureka/"
 
   movie-catalog-service:
-    image: oklat85/movie-catalog-service:latest
+    build: movie-catalog-service
     container_name:  movie-catalog-service
     ports:
       - "8081:8081"
@@ -24,9 +26,12 @@ services:
     environment:
      - "SPRING_APPLICATION_NAME=movie-catalog-service"
      - "SPRING_PROFILES_ACTIVE=docker"
+     - "eureka.client.serviceUrl.defaultZone=http://service-registry:8761/eureka/"
+    links:
+     - service-registry
 
   movie-info-service:
-    image: oklat85/movie-info-service:latest
+    build: movie-info-service
     container_name:  movie-info-service
     ports:
       - "8082:8082"
@@ -37,9 +42,12 @@ services:
     environment:
      - "SPRING_APPLICATION_NAME=movie-info-service"
      - "SPRING_PROFILES_ACTIVE=docker"
+     - "eureka.client.serviceUrl.defaultZone=http://service-registry:8761/eureka/"
+    links:
+     - service-registry
 
   rating-data-service:
-    image: oklat85/rating-data-service:latest
+    build: rating-data-service
     container_name:  rating-data-service
     ports:
       - "8083:8083"
@@ -49,7 +57,10 @@ services:
       - movie-app
     environment:
      - "SPRING_APPLICATION_NAME=rating-data-service"
-     - "SPRING_PROFILES_ACTIVE=native"
+     - "SPRING_PROFILES_ACTIVE=docker"
+     - "eureka.client.serviceUrl.defaultZone=http://service-registry:8761/eureka/"
+    links:
+     - service-registry
      
 networks:
   movie-app:

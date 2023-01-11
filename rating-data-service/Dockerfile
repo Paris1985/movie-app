@@ -27,5 +27,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
+EXPOSE 8083
+
 #execute the application
 ENTRYPOINT ["java","-cp","app:app/lib/*","com.movie.service.rating.data.service.RatingDataServiceApplication"]
